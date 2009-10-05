@@ -125,18 +125,18 @@ class MessageHandler(object):
 		log.info(' on %d unique domains', len(self.by_domain))
 		log.info(' on %d unique subnets', len(self.by_subnet))
 
-	def get_folder_messages(self, folder, query='ALL'):
+	def get_folder_messages(self, folder, query='ALL', readonly=True):
 		options = self.options
 		get_login_params(options)
-		M = IMAP4_SSL(options.hostname)
-		M.login(options.username, options.password)
-		M.select(folder, readonly=True)
+		self.server = IMAP4_SSL(options.hostname)
+		self.server.login(options.username, options.password)
+		self.server.select(folder, readonly=readonly)
 		# for date-limited query, use 'SINCE "8-Aug-2006"'
-		typ, data = M.search(None, query)
-		message_ids = data[0].split()
-		log.info('loading %d messages from %s', len(message_ids), folder)
-		get_message = lambda id: M.fetch(id, '(RFC822)')
-		messages = itertools.imap(get_message, message_ids)
+		typ, data = self.server.search(None, query)
+		self.message_ids = data[0].split()
+		log.info('loading %d messages from %s', len(self.message_ids), folder)
+		get_message = lambda id: self.server.fetch(id, '(RFC822)')
+		messages = itertools.imap(get_message, self.message_ids)
 		return self.parse_imap_messages(messages)
 
 class JunkEmailJanitor(MessageHandler):
@@ -144,9 +144,25 @@ class JunkEmailJanitor(MessageHandler):
 	A MessageHandler that will go through the junk e-mail folder and
 	remove messages sent by blocklisted servers.
 	"""
+	blocklist_servers = ['zen.spamhaus.org']
+	skip_messages_with_no_detail = False
+
 	def run(self):
-		self.messages = list(self.get_folder_messages('Junk E-mail'))
+		self.messages = list(self.get_folder_messages('Junk E-mail', readonly=False))
 		self.summarize()
+		self.delete_messages_on_blocklist()
+
+	def delete_messages_on_blocklist(self):
+		from jaraco.net import dnsbl
+		dnsbl.blocklist_servers = self.blocklist_servers
+		for id, msg in zip(self.message_ids, self.messages):
+			if not msg._detail and self.skip_messages_with_no_detail: continue
+			if msg._detail and not dnsbl.lookup_host(msg.sender): continue
+			log.info('%s to be deleted', id)
+			self.server.store(id, '+FLAGS', '\\Deleted')
+		msg, deleted = self.server.expunge()
+		deleted = filter(None, deleted)
+		log.info('deleted %d messages', len(deleted))
 
 def remove_known_spammers():
 	global handler
