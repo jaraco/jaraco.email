@@ -58,10 +58,14 @@ class MessageDetailWrapper(object):
 			octets[-1] = '0'
 			return '.'.join(octets)+'/24'
 
-		received_pat = re.compile('from (?P<name>.+) \(\[?(?P<sender>[0-9.]+)\]?\) by')
-		if not 'Received' in message: return
+		received_pat = re.compile('from (?P<name>.*) \(\[?(?P<sender>[0-9.]+)\]?\) by')
+		if not 'Received' in message:
+			log.warning('No Received header in message')
+			return
 		match = received_pat.match(message['Received'])
-		if not match: return
+		if not match:
+			log.warning('Unrecognized Received header: %s', message['Received'])
+			return
 		res = match.groupdict()
 		res['domain'] = get_domain(res['name'])
 		res['subnet'] = get_subnet(res['sender'])
@@ -83,8 +87,6 @@ class MessageHandler(object):
 		id, msg = data
 		msg = email.message_from_string(msg)
 		msg = MessageDetailWrapper(msg)
-		if not msg._detail:
-			log.warning('found message with unparseable detail')
 		return msg
 
 	def group_by(self, key):
