@@ -67,6 +67,8 @@ class MessageDetailWrapper(object):
 		res['subnet'] = get_subnet(res['sender'])
 		return res
 
+def safe_attrgetter(attr):
+	return lambda obj: getattr(obj, attr, None)
 
 class MessageHandler(object):
 	def __init__(self, options = None):
@@ -93,17 +95,17 @@ class MessageHandler(object):
 
 	@property
 	def by_sender(self):
-		key = operator.attrgetter('sender')
+		key = safe_attrgetter('sender')
 		return self.group_by(key)
 
 	@property
 	def by_domain(self):
-		key = operator.attrgetter('domain')
+		key = safe_attrgetter('domain')
 		return self.group_by(key)
 
 	@property
 	def by_subnet(self):
-		key = operator.attrgetter('subnet')
+		key = safe_attrgetter('subnet')
 		return self.group_by(key)
 
 	@staticmethod
