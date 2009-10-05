@@ -12,6 +12,8 @@ from getpass import getpass, getuser
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
+DEFAULT_SERVER = 'mail.jaraco.com'
+
 def get_login_params(options):
 	if not options.username:
 		options.username = raw_input('username [%s]: ' % getuser()) or getuser()
@@ -20,7 +22,7 @@ def get_login_params(options):
 
 def add_options(parser):
 	parser.add_option('-u', '--username')
-	parser.add_option('--hostname', default='hornigold.jaraco.com')
+	parser.add_option('--hostname', default=DEFAULT_SERVER)
 
 def get_options():
 	parser = OptionParser()
@@ -139,7 +141,7 @@ class JunkEmailJanitor(MessageHandler):
 	remove messages sent by blocklisted servers.
 	"""
 	def run(self):
-		self.messages = self.get_folder_messages('Junk E-mail')
+		self.messages = list(self.get_folder_messages('Junk E-mail'))
 		self.summarize()
 
 def remove_known_spammers():
