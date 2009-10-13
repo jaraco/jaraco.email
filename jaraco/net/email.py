@@ -14,15 +14,54 @@ log = logging.getLogger(__name__)
 
 DEFAULT_SERVER = 'mail.jaraco.com'
 
+### save password to registry
+# todo: move this to another module
+try:
+	import winreg
+except ImportError:
+	import _winreg as winreg
+
+def load_saved_password():
+	hkcu = winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER)
+	try:
+		key = winreg.OpenKey(hkcu, r'Software\jaraco.net\email', 0, winreg.KEY_READ)
+		password, type = winreg.QueryValueEx(key, 'password')
+	except WindowsError:
+		return None
+	from jaraco.windows import dpapi
+	descr, password_decrypted = dpapi.CryptUnprotectData(password)
+	return password_decrypted
+
+def save_password(password):
+	from jaraco.windows import dpapi
+	password_encrypted = dpapi.CryptProtectData(password)
+	hkcu = winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER)
+	try:
+		key = winreg.CreateKey(hkcu, r'Software\jaraco.net\email')
+		key = winreg.OpenKey(hkcu, r'Software\jaraco.net\email', 0, winreg.KEY_READ | winreg.KEY_WRITE)
+		winreg.SetValueEx(key, 'password', 0, winreg.REG_BINARY, password_encrypted)
+	except WindowsError:
+		log.error('Failed to save password')
+		raise
+
+### end save password to registry
+
 def get_login_params(options):
 	if not options.username:
 		options.username = raw_input('username [%s]: ' % getuser()) or getuser()
 	if not getattr(options, 'password', None):
-		options.password = getpass('password for %s: ' % options.username)
+		saved_password = load_saved_password()
+		options.password = (
+			saved_password
+			or getpass('password for %s: ' % options.username)
+			)
+		if options.save_password:
+			save_password(options.password)
 
 def add_options(parser):
 	parser.add_option('-u', '--username')
 	parser.add_option('--hostname', default=DEFAULT_SERVER)
+	parser.add_option('--save-password', default=False, action="store_true")
 
 def get_options():
 	parser = OptionParser()
