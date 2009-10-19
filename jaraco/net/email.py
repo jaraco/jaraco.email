@@ -174,7 +174,7 @@ class MessageHandler(object):
 		typ, data = self.server.search(None, query)
 		self.message_ids = data[0].split()
 		log.info('loading %d messages from %s', len(self.message_ids), folder)
-		get_message = lambda id: self.server.fetch(id, '(RFC822)')
+		get_message = lambda id: self.server.fetch(id, '(BODY.PEEK[HEADER])')
 		messages = itertools.imap(get_message, self.message_ids)
 		return self.parse_imap_messages(messages)
 
