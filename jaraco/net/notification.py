@@ -10,7 +10,7 @@
 		SMTPMailbox - sends a message to an SMTP mailbox upon
 			notification.
 			
-Copyright © 2004-2008 Jason R. Coombs
+Copyright Â© 2004-2008 Jason R. Coombs
 """
 
 __author__ = 'Jason R. Coombs <jaraco@jaraco.com>'
