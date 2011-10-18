@@ -9,14 +9,9 @@
 	Objects:
 		SMTPMailbox - sends a message to an SMTP mailbox upon
 			notification.
-			
+
 Copyright © 2004-2008 Jason R. Coombs
 """
-
-__author__ = 'Jason R. Coombs <jaraco@jaraco.com>'
-__version__ = '$Revision$a'[11:-2]
-__svnauthor__ = '$Author$'[9:-2]
-__date__ = '$Date$'[7:-2]
 
 import string
 import smtplib
@@ -26,7 +21,7 @@ import traceback
 from StringIO import StringIO
 
 from jaraco.util.dictlib import DictFilter
-from jaraco.util.iter_ import flatten
+from jaraco.util.itertools import flatten
 
 class NotificationTarget(object):
 	def write(self, msg):
@@ -48,7 +43,7 @@ class SMTPMailbox(NotificationTarget):
 		class_name = cls.__name__
 		return '%(class_name)s <notifier@%(machine_name)s>' % vars()
 
-	def notify(self, msg = '', importance = 'Normal', subject='Notification'):        
+	def notify(self, msg = '', importance = 'Normal', subject='Notification'):
 		import smtplib
 
 		headers = dict(
@@ -107,7 +102,7 @@ class BufferedNotifier(NotificationTarget):
 		# don't send an empty message
 		if msg:
 			self.notify(msg)
-		
+
 	def _get_buffer(self):
 		return self.__dict__.setdefault('buffer', StringIO())
 
@@ -118,7 +113,7 @@ class BufferedNotifier(NotificationTarget):
 		#  However, this appears to be the only way to guarantee
 		#  that the notification is actually sent.
 		self.flush()
-		
+
 class ExceptionNotifier(BufferedNotifier, SMTPMailbox):
 	"""
 	Wrap a function or method call with an exception handler
