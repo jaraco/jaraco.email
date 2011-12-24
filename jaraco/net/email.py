@@ -183,7 +183,6 @@ class JunkEmailJanitor(MessageHandler):
 	A MessageHandler that will go through the junk e-mail folder and
 	remove messages sent by blocklisted servers.
 	"""
-	blocklist_servers = ['zen.spamhaus.org']
 	skip_messages_with_no_detail = False
 
 	def run(self):
@@ -193,10 +192,10 @@ class JunkEmailJanitor(MessageHandler):
 
 	def delete_messages_on_blocklist(self):
 		from jaraco.net import dnsbl
-		dnsbl.blocklist_servers = self.blocklist_servers
+		dnsbl_service = dnsbl.Service('zen.spamhouse.org')
 		for id, msg in zip(self.message_ids, self.messages):
 			if not msg._detail and self.skip_messages_with_no_detail: continue
-			if msg._detail and not dnsbl.lookup_host(msg.sender): continue
+			if msg._detail and not dnsbl_service.lookup(msg.sender): continue
 			log.info('%s to be deleted', id)
 			self.server.store(id, '+FLAGS', '\\Deleted')
 		msg, deleted = self.server.expunge()
