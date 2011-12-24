@@ -5,8 +5,8 @@ import itertools
 import email
 import operator
 import logging
+import argparse
 from imaplib import IMAP4_SSL
-from optparse import OptionParser
 from getpass import getpass, getuser
 
 import keyring
@@ -26,17 +26,17 @@ def get_login_params(options):
 		if options.save_password:
 			keyring.set_password(options.hostname, options.username, options.password)
 
-def add_options(parser):
-	parser.add_option('-u', '--username')
-	parser.add_option('--hostname', default='pod51011.outlook.com')
-	parser.add_option('--save-password', default=False, action="store_true")
+def add_arguments(parser):
+	parser.add_argument('-u', '--username')
+	parser.add_argument('--hostname', default='pod51011.outlook.com')
+	parser.add_argument('--save-password', default=False, action="store_true")
 
 def get_options():
-	parser = OptionParser()
-	add_options(parser)
-	options, args = parser.parse_args()
-	get_login_params(options)
-	return options
+	parser = argparse.ArgumentParser()
+	add_arguments(parser)
+	args = parser.parse_args()
+	get_login_params(args)
+	return args
 
 class MessageDetailWrapper(object):
 	"""
