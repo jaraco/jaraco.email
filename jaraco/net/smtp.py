@@ -4,15 +4,13 @@ import re
 import time
 import smtpd
 import asyncore
-from optparse import OptionParser
+import argparse
 
 def _get_args():
-	global options
-
-	p = OptionParser()
-	p.add_option('-p', '--port', type='int', help="Bind to port", default=25)
-
-	options, args = p.parse_args()
+	p = argparse.ArgumentParser()
+	p.add_argument('-p', '--port', type=int, help="Bind to port",
+		default=25)
+	return p.parse_args()
 
 class DebuggingServer(smtpd.DebuggingServer):
 	def process_message(self, peer, mailfrom, rcpttos, data):
@@ -24,7 +22,7 @@ class DebuggingServer(smtpd.DebuggingServer):
 
 def start_simple_server():
 	"A simple mail server that sends a simple response"
-	_get_args()
-	addr = ('', options.port)
+	args = _get_args()
+	addr = ('', args.port)
 	s = DebuggingServer(addr, None)
 	asyncore.loop()
