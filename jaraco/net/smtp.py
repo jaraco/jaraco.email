@@ -1,7 +1,5 @@
-import socket
-import sys
-import re
-import time
+from __future__ import print_function, unicode_literals
+
 import smtpd
 import asyncore
 import argparse
@@ -15,9 +13,9 @@ def _get_args():
 class DebuggingServer(smtpd.DebuggingServer):
 	def process_message(self, peer, mailfrom, rcpttos, data):
 		# seriously, why doesn't a debugging server just print everything?
-		for var, val in vars().items():
-			if var in ('self', 'data'): continue
-			print ': '.join(map(str, (var, val)))
+		print('peer:', peer)
+		print('mailfrom:', mailfrom)
+		print('rcpttos:', rcpttos)
 		smtpd.DebuggingServer.process_message(self, peer, mailfrom, rcpttos, data)
 
 def start_simple_server():
