@@ -21,6 +21,7 @@ import smtplib
 import socket
 import sys
 import traceback
+import itertools
 import io
 
 from jaraco.util.dictlib import DictFilter
@@ -29,6 +30,26 @@ from jaraco.util.itertools import flatten
 class NotificationTarget(object):
 	def write(self, msg):
 		self.notify(msg)
+
+class SeparatedValues(unicode):
+	"""
+	A string separated by a separator. Overrides __iter__ for getting
+	the values.
+	
+	>>> list(SeparatedValues('a,b,c'))
+	[u'a', u'b', u'c']
+	
+	Whitespace is stripped and empty values are discarded.
+	
+	>>> list(SeparatedValues(' a,   b   , c,  '))
+	[u'a', u'b', u'c']
+	
+	"""
+	separator = ','
+	
+	def __iter__(self):
+		parts = self.split(self.separator)
+		return itertools.ifilter(None, (part.strip() for part in parts))
 
 class SMTPMailbox(NotificationTarget):
 	from_addr = None
@@ -69,7 +90,7 @@ class SMTPMailbox(NotificationTarget):
 	@property
 	def dest_addrs(self):
 		return itertools.chain.from_iterable(
-			comma_separated_values(getattr(self, key, ''))
+			SeparatedValues(getattr(self, key, ''))
 			for key in ('to_addrs', 'cc_addrs', 'bcc_addrs')
 		)
 
