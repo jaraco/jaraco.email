@@ -1,4 +1,9 @@
-import socket, sys, re, time
+import socket
+import sys
+import re
+import time
+import smtpd
+import asyncore
 from optparse import OptionParser
 
 def _get_args():
@@ -9,9 +14,6 @@ def _get_args():
 
 	options, args = p.parse_args()
 
-import smtpd
-import asyncore
-
 class DebuggingServer(smtpd.DebuggingServer):
 	def process_message(self, peer, mailfrom, rcpttos, data):
 		# seriously, why doesn't a debugging server just print everything?
@@ -19,7 +21,6 @@ class DebuggingServer(smtpd.DebuggingServer):
 			if var in ('self', 'data'): continue
 			print ': '.join(map(str, (var, val)))
 		smtpd.DebuggingServer.process_message(self, peer, mailfrom, rcpttos, data)
-
 
 def start_simple_server():
 	"A simple mail server that sends a simple response"
