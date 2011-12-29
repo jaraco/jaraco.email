@@ -7,5 +7,4 @@ class TestMailbox(object):
 			cc_addrs = "c@example.com,d@example.com",
 			bcc_addrs = "e@example.com,f@example.com",
 		)
-		assert len(list(mbx.dest_addrs)) == 6
-		
+		assert len(mbx.dest_addrs) == 6
