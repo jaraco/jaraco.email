@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
-"""Notifiers
+"""
+Notifiers
 	Classes for notifying in the case of an event.
 
 	All objects should support the .write method to append data and
@@ -10,15 +11,17 @@
 		SMTPMailbox - sends a message to an SMTP mailbox upon
 			notification.
 
-Copyright © 2004-2008 Jason R. Coombs
+Copyright © 2004-2011 Jason R. Coombs
 """
+
+from __future__ import print_function
 
 import string
 import smtplib
 import socket
 import sys
 import traceback
-from StringIO import StringIO
+import io
 
 from jaraco.util.dictlib import DictFilter
 from jaraco.util.itertools import flatten
@@ -44,14 +47,12 @@ class SMTPMailbox(NotificationTarget):
 		return '%(class_name)s <notifier@%(machine_name)s>' % vars()
 
 	def notify(self, msg = '', importance = 'Normal', subject='Notification'):
-		import smtplib
-
 		headers = dict(
 			From = self.from_addr,
 			To = self.to_addrs,
 			Importance = importance,
 			Subject = subject,
-			)
+		)
 
 		if hasattr(self, 'cc_addrs'):
 			headers['CC'] = self.cc_addrs
@@ -61,18 +62,16 @@ class SMTPMailbox(NotificationTarget):
 		server.sendmail(
 			self.from_addr,
 			self.dest_addrs,
-			self.format_message(headers, msg))
+			self.format_message(headers, msg)
+		)
 		server.quit()
 
 	@property
 	def dest_addrs(self):
-		from string import strip
-		get_attr = lambda a: getattr(self, a, None)
-		to_attrs = ('to_addrs', 'cc_addrs', 'bcc_addrs')
-		values = filter(None, map(get_attr, to_attrs))
-		split_email = lambda s: map(strip, s.split(','))
-		all_addrs = flatten(map(split_email, values))
-		return all_addrs
+		return itertools.chain.from_iterable(
+			comma_separated_values(getattr(self, key, ''))
+			for key in ('to_addrs', 'cc_addrs', 'bcc_addrs')
+		)
 
 	def get_connect_args(self):
 		attrs = 'host', 'port'
@@ -104,7 +103,7 @@ class BufferedNotifier(NotificationTarget):
 			self.notify(msg)
 
 	def _get_buffer(self):
-		return self.__dict__.setdefault('buffer', StringIO())
+		return self.__dict__.setdefault('buffer', io.StringIO())
 
 	def __del__(self):
 		# note, the documentation warns against performing external
@@ -127,7 +126,7 @@ class ExceptionNotifier(BufferedNotifier, SMTPMailbox):
 		try:
 			return self.target_func(*args, **kargs)
 		except Exception, e:
-			print >> self, 'Unhandled exception encountered'
+			print('Unhandled exception encountered', file=self)
 			traceback.print_exc(file=self)
 			self.flush()
 			raise
