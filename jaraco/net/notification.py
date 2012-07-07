@@ -16,16 +16,12 @@ Copyright © 2004-2011 Jason R. Coombs
 
 from __future__ import print_function
 
-import string
 import smtplib
-import socket
-import sys
 import traceback
 import itertools
 import io
 
 from jaraco.util.dictlib import DictFilter
-from jaraco.util.itertools import flatten
 
 class NotificationTarget(object):
 	def write(self, msg):
@@ -146,7 +142,7 @@ class ExceptionNotifier(BufferedNotifier, SMTPMailbox):
 	def __call__(self, *args, **kargs):
 		try:
 			return self.target_func(*args, **kargs)
-		except Exception, e:
+		except Exception:
 			print('Unhandled exception encountered', file=self)
 			traceback.print_exc(file=self)
 			self.flush()
