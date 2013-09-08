@@ -123,7 +123,7 @@ class MessageHandler(object):
 		lengths = map(len, items.values())
 		by_length = zip(lengths, keys)
 		by_length.sort(reverse=True)
-		swap = lambda (a,b): (b,a)
+		swap = lambda a,b: (b,a)
 		return map(swap, by_length)
 
 	def summarize(self):

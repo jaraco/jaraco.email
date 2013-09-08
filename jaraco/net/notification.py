@@ -33,19 +33,19 @@ class SeparatedValues(six.text_type):
 	the values.
 
 	>>> list(SeparatedValues('a,b,c'))
-	[u'a', u'b', u'c']
+	['a', 'b', 'c']
 
 	Whitespace is stripped and empty values are discarded.
 
 	>>> list(SeparatedValues(' a,   b   , c,  '))
-	[u'a', u'b', u'c']
+	['a', 'b', 'c']
 
 	"""
 	separator = ','
 
 	def __iter__(self):
 		parts = self.split(self.separator)
-		return itertools.ifilter(None, (part.strip() for part in parts))
+		return six.moves.filter(None, (part.strip() for part in parts))
 
 class SMTPMailbox(NotificationTarget):
 	from_addr = None
