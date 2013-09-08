@@ -51,7 +51,7 @@ class MessageDetailWrapper(object):
 		self._detail = self.get_sender_details(self._message)
 
 	def __getattr__(self, name):
-		if name == '__setstate__': raise AttributeError, name
+		if name == '__setstate__': raise AttributeError(name)
 		detail = self._detail and self._detail.get(name, None)
 		return detail or getattr(self._message, name)
 

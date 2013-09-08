@@ -10,8 +10,6 @@ Notifiers
 	Objects:
 		SMTPMailbox - sends a message to an SMTP mailbox upon
 			notification.
-
-Copyright © 2004-2011 Jason R. Coombs
 """
 
 from __future__ import print_function
@@ -21,13 +19,15 @@ import traceback
 import itertools
 import io
 
+import six
+
 from jaraco.util.dictlib import DictFilter
 
 class NotificationTarget(object):
 	def write(self, msg):
 		self.notify(msg)
 
-class SeparatedValues(unicode):
+class SeparatedValues(six.text_type):
 	"""
 	A string separated by a separator. Overrides __iter__ for getting
 	the values.

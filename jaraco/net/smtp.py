@@ -22,5 +22,5 @@ def start_simple_server():
 	"A simple mail server that sends a simple response"
 	args = _get_args()
 	addr = ('', args.port)
-	s = DebuggingServer(addr, None)
+	DebuggingServer(addr, None)
 	asyncore.loop()
