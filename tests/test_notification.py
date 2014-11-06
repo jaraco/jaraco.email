@@ -1,3 +1,4 @@
+import mock
 from jaraco.net import notification
 
 class TestMailbox(object):
@@ -8,3 +9,9 @@ class TestMailbox(object):
 			bcc_addrs = "e@example.com,f@example.com",
 		)
 		assert len(mbx.dest_addrs) == 6
+
+	@mock.patch('smtplib.SMTP')
+	def test_send_message(self, SMTP):
+		mbx = notification.SMTPMailbox('a@example.com')
+		mbx.notify('foo')
+		assert SMTP().sendmail.called
