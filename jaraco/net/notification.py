@@ -63,12 +63,12 @@ class SMTPMailbox(NotificationTarget):
 		class_name = cls.__name__
 		return '%(class_name)s <notifier@%(machine_name)s>' % locals()
 
-	def notify(self, msg = '', importance = 'Normal', subject='Notification'):
+	def notify(self, msg='', importance='Normal', subject='Notification'):
 		headers = dict(
-			From = self.from_addr,
-			To = self.to_addrs,
-			Importance = importance,
-			Subject = subject,
+			From=self.from_addr,
+			To=self.to_addrs,
+			Importance=importance,
+			Subject=subject,
 		)
 
 		if hasattr(self, 'cc_addrs'):
