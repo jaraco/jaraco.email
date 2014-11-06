@@ -96,7 +96,6 @@ class SMTPMailbox(NotificationTarget):
 
 	@staticmethod
 	def format_message(headers, msg):
-		msg = msg.encode('ascii', 'replace')
 		format_header = lambda h: '%s: %s\n' % h
 		formatted_headers = map(format_header, headers.items())
 		header = ''.join(formatted_headers)
