@@ -61,7 +61,7 @@ class SMTPMailbox(NotificationTarget):
 		import socket
 		machine_name = socket.getfqdn()
 		class_name = cls.__name__
-		return '%(class_name)s <notifier@%(machine_name)s>' % vars()
+		return '%(class_name)s <notifier@%(machine_name)s>' % locals()
 
 	def notify(self, msg = '', importance = 'Normal', subject='Notification'):
 		headers = dict(
