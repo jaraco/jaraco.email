@@ -1,4 +1,4 @@
-import mock
+from unittest import mock
 from jaraco.net import notification
 
 class TestMailbox(object):
