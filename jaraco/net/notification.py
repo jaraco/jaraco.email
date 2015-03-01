@@ -18,6 +18,7 @@ import smtplib
 import traceback
 import itertools
 import io
+import contextlib
 
 import six
 
@@ -146,3 +147,14 @@ class ExceptionNotifier(BufferedNotifier, SMTPMailbox):
 			traceback.print_exc(file=self)
 			self.flush()
 			raise
+
+@contextlib.contextmanager
+def notify_exceptions(notifier):
+	assert notifier.flush
+	try:
+		yield
+	except:
+		print("Unhandled exception encountered", file=notifier)
+		traceback.print_exc(file=notifier)
+		notifier.flush()
+		raise
