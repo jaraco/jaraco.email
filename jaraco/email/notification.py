@@ -20,33 +20,13 @@ import itertools
 import io
 import contextlib
 
-import six
-
 from jaraco.collections import DictFilter
+from jaraco.text import SeparatedValues
+
 
 class NotificationTarget(object):
 	def write(self, msg):
 		self.notify(msg)
-
-class SeparatedValues(six.text_type):
-	"""
-	A string separated by a separator. Overrides __iter__ for getting
-	the values.
-
-	>>> list(SeparatedValues('a,b,c'))
-	['a', 'b', 'c']
-
-	Whitespace is stripped and empty values are discarded.
-
-	>>> list(SeparatedValues(' a,   b   , c,  '))
-	['a', 'b', 'c']
-
-	"""
-	separator = ','
-
-	def __iter__(self):
-		parts = self.split(self.separator)
-		return six.moves.filter(None, (part.strip() for part in parts))
 
 class SMTPMailbox(NotificationTarget):
 	from_addr = None
