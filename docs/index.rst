@@ -1,5 +1,5 @@
 Welcome to jaraco.email documentation!
-========================================
+======================================
 
 .. toctree::
    :maxdepth: 1
