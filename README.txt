@@ -1,2 +1,4 @@
-`Documentation <https://pythonhosted.org/jaraco.email>`_jaraco.email
+jaraco.email
 ============
+
+`Documentation <https://pythonhosted.org/jaraco.email>`_
