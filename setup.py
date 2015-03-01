@@ -25,6 +25,8 @@ setup_params = dict(
 	url="https://bitbucket.org/jaraco/jaraco.email",
 	packages=setuptools.find_packages(),
 	install_requires=[
+		'jaraco.text>=1.3',
+		'jaraco.collections',
 	],
 	setup_requires=[
 		'setuptools_scm',
