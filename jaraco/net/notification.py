@@ -21,7 +21,7 @@ import io
 
 import six
 
-from jaraco.util.dictlib import DictFilter
+from jaraco.collections import DictFilter
 
 class NotificationTarget(object):
 	def write(self, msg):
