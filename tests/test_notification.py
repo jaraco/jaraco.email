@@ -1,5 +1,5 @@
 from unittest import mock
-from jaraco.net import notification
+from jaraco.email import notification
 
 class TestMailbox(object):
 	def test_dest_addrs(self):
