@@ -7,7 +7,17 @@ Welcome to jaraco.email documentation!
    history
 
 
-.. automodule:: jaraco.email
+.. automodule:: jaraco.email.messages
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: jaraco.email.notification
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: jaraco.email.smtp
     :members:
     :undoc-members:
     :show-inheritance:
