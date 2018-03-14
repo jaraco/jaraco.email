@@ -1,3 +1,8 @@
+1.2
+===
+
+Refresh package.
+
 1.1
 ===
 
