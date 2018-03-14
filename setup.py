@@ -36,6 +36,7 @@ params = dict(
 		'jaraco.text>=1.3',
 		'jaraco.collections',
 		'keyring',
+		'six',
 	],
 	extras_require={
 		'testing': [

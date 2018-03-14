@@ -9,6 +9,8 @@ import argparse
 from imaplib import IMAP4_SSL
 from getpass import getpass, getuser
 
+from six.moves import input
+
 import keyring
 
 logging.basicConfig(level=logging.INFO)
@@ -16,7 +18,7 @@ log = logging.getLogger(__name__)
 
 def get_login_params(options):
 	if not options.username:
-		options.username = raw_input('username [%s]: ' % getuser()) or getuser()
+		options.username = input('username [%s]: ' % getuser()) or getuser()
 	if not getattr(options, 'password', None):
 		saved_password = keyring.get_password(options.hostname, options.username)
 		options.password = (
