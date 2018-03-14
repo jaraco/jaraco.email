@@ -28,6 +28,7 @@ class NotificationTarget(object):
 	def write(self, msg):
 		self.notify(msg)
 
+
 class SMTPMailbox(NotificationTarget):
 	from_addr = None
 
@@ -77,13 +78,15 @@ class SMTPMailbox(NotificationTarget):
 
 	@staticmethod
 	def format_message(headers, msg):
-		format_header = lambda h: '%s: %s\n' % h
+		def format_header(h):
+			return '%s: %s\n' % h
 		formatted_headers = map(format_header, headers.items())
 		header = ''.join(formatted_headers)
 		return '\n'.join((header, msg))
 
 	def __repr__(self):
 		return 'mailto:' + self.to_addrs
+
 
 class BufferedNotifier(NotificationTarget):
 	"""
@@ -110,6 +113,7 @@ class BufferedNotifier(NotificationTarget):
 		#  that the notification is actually sent.
 		self.flush()
 
+
 class ExceptionNotifier(BufferedNotifier, SMTPMailbox):
 	"""
 	Wrap a function or method call with an exception handler
@@ -128,12 +132,13 @@ class ExceptionNotifier(BufferedNotifier, SMTPMailbox):
 			self.flush()
 			raise
 
+
 @contextlib.contextmanager
 def notify_exceptions(notifier):
 	assert notifier.flush
 	try:
 		yield
-	except:
+	except Exception:
 		print("Unhandled exception encountered", file=notifier)
 		traceback.print_exc(file=notifier)
 		notifier.flush()
