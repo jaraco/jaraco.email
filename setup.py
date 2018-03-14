@@ -47,6 +47,7 @@ params = dict(
 			'pytest-flake8',
 
 			# local
+			'backports.unittest_mock',
 		],
 		'docs': [
 			# upstream
