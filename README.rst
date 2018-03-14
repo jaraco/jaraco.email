@@ -1,13 +1,13 @@
-.. image:: https://img.shields.io/pypi/v/skeleton.svg
-   :target: https://pypi.org/project/skeleton
+.. image:: https://img.shields.io/pypi/v/jaraco.email.svg
+   :target: https://pypi.org/project/jaraco.email
 
-.. image:: https://img.shields.io/pypi/pyversions/skeleton.svg
+.. image:: https://img.shields.io/pypi/pyversions/jaraco.email.svg
 
-.. image:: https://img.shields.io/travis/jaraco/skeleton/master.svg
-   :target: https://travis-ci.org/jaraco/skeleton
+.. image:: https://img.shields.io/travis/jaraco/jaraco.email/master.svg
+   :target: https://travis-ci.org/jaraco/jaraco.email
 
-.. .. image:: https://img.shields.io/appveyor/ci/jaraco/skeleton/master.svg
-..    :target: https://ci.appveyor.com/project/jaraco/skeleton/branch/master
+.. .. image:: https://img.shields.io/appveyor/ci/jaraco/jaraco.email/master.svg
+..    :target: https://ci.appveyor.com/project/jaraco/jaraco.email/branch/master
 
-.. .. image:: https://readthedocs.org/projects/skeleton/badge/?version=latest
-..    :target: https://skeleton.readthedocs.io/en/latest/?badge=latest
+.. .. image:: https://readthedocs.org/projects/jaracoemail/badge/?version=latest
+..    :target: https://jaracoemail.readthedocs.io/en/latest/?badge=latest
