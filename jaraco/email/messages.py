@@ -72,7 +72,7 @@ class MessageDetailWrapper(object):
 			return '.'.join(octets) + '/24'
 
 		received_pat = re.compile(
-			'from (?P<name>.*) \(\[?(?P<sender>[0-9.]+)\]?\) by')
+			r'from (?P<name>.*) \(\[?(?P<sender>[0-9.]+)\]?\) by')
 		if 'Received' not in message:
 			log.warning('No Received header in message')
 			return
