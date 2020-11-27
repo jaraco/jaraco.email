@@ -1,13 +1,18 @@
 .. image:: https://img.shields.io/pypi/v/jaraco.email.svg
-   :target: https://pypi.org/project/jaraco.email
+   :target: `PyPI link`_
 
 .. image:: https://img.shields.io/pypi/pyversions/jaraco.email.svg
+   :target: `PyPI link`_
 
-.. image:: https://img.shields.io/travis/jaraco/jaraco.email/master.svg
-   :target: https://travis-ci.org/jaraco/jaraco.email
+.. _PyPI link: https://pypi.org/project/jaraco.email
 
-.. .. image:: https://img.shields.io/appveyor/ci/jaraco/jaraco.email/master.svg
-..    :target: https://ci.appveyor.com/project/jaraco/jaraco.email/branch/master
+.. image:: https://github.com/jaraco/jaraco.email/workflows/Automated%20Tests/badge.svg
+   :target: https://github.com/jaraco/jaraco.email/actions?query=workflow%3A%22Automated+Tests%22
+   :alt: Automated Tests
 
-.. .. image:: https://readthedocs.org/projects/jaracoemail/badge/?version=latest
-..    :target: https://jaracoemail.readthedocs.io/en/latest/?badge=latest
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/psf/black
+   :alt: Code style: Black
+
+.. .. image:: https://readthedocs.org/projects/skeleton/badge/?version=latest
+..    :target: https://skeleton.readthedocs.io/en/latest/?badge=latest
