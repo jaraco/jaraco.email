@@ -2,14 +2,14 @@
 
 """
 Notifiers
-	Classes for notifying in the case of an event.
+    Classes for notifying in the case of an event.
 
-	All objects should support the .write method to append data and
-	.Notify to send the message.
+    All objects should support the .write method to append data and
+    .Notify to send the message.
 
-	Objects:
-		SMTPMailbox - sends a message to an SMTP mailbox upon
-			notification.
+    Objects:
+        SMTPMailbox - sends a message to an SMTP mailbox upon
+            notification.
 """
 
 from __future__ import print_function
