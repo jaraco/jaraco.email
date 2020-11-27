@@ -1,5 +1,3 @@
-# -*- coding: UTF-8 -*-
-
 """
 Notifiers
     Classes for notifying in the case of an event.
@@ -11,8 +9,6 @@ Notifiers
         SMTPMailbox - sends a message to an SMTP mailbox upon
             notification.
 """
-
-from __future__ import print_function
 
 import smtplib
 import traceback

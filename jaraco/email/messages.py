@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import re
 import itertools
 import email
@@ -7,8 +5,6 @@ import logging
 import argparse
 from imaplib import IMAP4_SSL
 from getpass import getpass, getuser
-
-from six.moves import input
 
 import keyring
 
