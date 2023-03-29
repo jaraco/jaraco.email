@@ -16,7 +16,7 @@ import itertools
 import io
 import contextlib
 
-from jaraco.collections import DictFilter
+from jaraco.collections import Projection
 from jaraco.text import SeparatedValues
 
 
@@ -71,7 +71,7 @@ class SMTPMailbox(NotificationTarget):
 
     def get_connect_args(self):
         attrs = 'host', 'port'
-        return dict(DictFilter(self.__dict__, attrs))
+        return Projection(attrs, self.__dict__)
 
     @staticmethod
     def format_message(headers, msg):
