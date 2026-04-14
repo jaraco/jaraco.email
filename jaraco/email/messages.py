@@ -1,10 +1,10 @@
-import re
-import itertools
-import email
-import logging
 import argparse
-from imaplib import IMAP4_SSL
+import email
+import itertools
+import logging
+import re
 from getpass import getpass, getuser
+from imaplib import IMAP4_SSL
 
 import keyring
 

@@ -10,11 +10,11 @@ Notifiers
             notification.
 """
 
+import contextlib
+import io
+import itertools
 import smtplib
 import traceback
-import itertools
-import io
-import contextlib
 
 from jaraco.collections import Projection
 from jaraco.text import SeparatedValues
