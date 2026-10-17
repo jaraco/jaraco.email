@@ -17,3 +17,10 @@ class TestMailbox:
         mbx = notification.SMTPMailbox('a@example.com')
         mbx.notify('foo')
         assert SMTP().sendmail.called
+
+
+@mock.patch('smtplib.SMTP')
+def test_exception_notifier(SMTP):
+    notifier = notification.ExceptionNotifier(lambda: 'ok', 'a@example.com')
+    assert notifier() == 'ok'
+    assert not SMTP.called
