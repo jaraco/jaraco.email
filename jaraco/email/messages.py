@@ -90,7 +90,7 @@ class MessageHandler(object):
         self.options = options or get_options()
 
     def parse_imap_messages(self, messages):
-        return itertools.imap(self.parse_imap_message, messages)
+        return map(self.parse_imap_message, messages)
 
     @staticmethod
     def parse_imap_message(imap_item):
@@ -153,7 +153,7 @@ class MessageHandler(object):
         def get_message(id):
             return self.server.fetch(id, '(BODY.PEEK[HEADER])')
 
-        messages = itertools.imap(get_message, self.message_ids)
+        messages = map(get_message, self.message_ids)
         return self.parse_imap_messages(messages)
 
 
