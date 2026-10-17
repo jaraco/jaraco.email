@@ -10,17 +10,17 @@ Notifiers
             notification.
 """
 
+import contextlib
+import io
+import itertools
 import smtplib
 import traceback
-import itertools
-import io
-import contextlib
 
 from jaraco.collections import Projection
 from jaraco.text import SeparatedValues
 
 
-class NotificationTarget(object):
+class NotificationTarget:
     def write(self, msg):
         self.notify(msg)
 
@@ -40,7 +40,7 @@ class SMTPMailbox(NotificationTarget):
 
         machine_name = socket.getfqdn()
         class_name = cls.__name__
-        return '%(class_name)s <notifier@%(machine_name)s>' % locals()
+        return f'{class_name} <notifier@{machine_name}>'
 
     def notify(self, msg='', importance='Normal', subject='Notification'):
         headers = dict(
@@ -75,12 +75,13 @@ class SMTPMailbox(NotificationTarget):
 
     @staticmethod
     def format_message(headers, msg):
-        def format_header(h):
-            return '%s: %s\n' % h
+        def format_header(item):
+            name, value = item
+            return f'{name}: {value}\n'
 
         formatted_headers = map(format_header, headers.items())
         header = ''.join(formatted_headers)
-        return '\n'.join((header, msg))
+        return f'{header}\n{msg}'
 
     def __repr__(self):
         return 'mailto:' + self.to_addrs
@@ -120,7 +121,7 @@ class ExceptionNotifier(BufferedNotifier, SMTPMailbox):
     """
 
     def __init__(self, target_func, *args, **kargs):
-        super(ExceptionNotifier, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
         self.target_func = target_func
 
     def __call__(self, *args, **kargs):

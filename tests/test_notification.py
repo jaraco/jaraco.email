@@ -1,8 +1,9 @@
 from unittest import mock
+
 from jaraco.email import notification
 
 
-class TestMailbox(object):
+class TestMailbox:
     def test_dest_addrs(self):
         mbx = notification.SMTPMailbox(
             to_addrs="a@example.com,b@example.com",

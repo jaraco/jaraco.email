@@ -1,10 +1,10 @@
-import re
-import itertools
-import email
-import logging
 import argparse
-from imaplib import IMAP4_SSL
+import email
+import itertools
+import logging
+import re
 from getpass import getpass, getuser
+from imaplib import IMAP4_SSL
 
 import keyring
 
@@ -14,11 +14,11 @@ log = logging.getLogger(__name__)
 
 def get_login_params(options):
     if not options.username:
-        options.username = input('username [%s]: ' % getuser()) or getuser()
+        options.username = input(f'username [{getuser()}]: ') or getuser()
     if not getattr(options, 'password', None):
         saved_password = keyring.get_password(options.hostname, options.username)
         options.password = saved_password or getpass(
-            'password for %s: ' % options.username
+            f'password for {options.username}: '
         )
         if options.save_password:
             keyring.set_password(options.hostname, options.username, options.password)
@@ -38,7 +38,7 @@ def get_options():
     return args
 
 
-class MessageDetailWrapper(object):
+class MessageDetailWrapper:
     """
     Wrap an RFC822 message, but provide some extra attributes
     that are useful for determining sender details.
@@ -85,7 +85,7 @@ def safe_attrgetter(attr):
     return lambda obj: getattr(obj, attr, None)
 
 
-class MessageHandler(object):
+class MessageHandler:
     def __init__(self, options=None):
         self.options = options or get_options()
 
@@ -94,8 +94,8 @@ class MessageHandler(object):
 
     @staticmethod
     def parse_imap_message(imap_item):
-        typ, (data, flags) = imap_item
-        id, msg = data
+        _typ, (data, _flags) = imap_item
+        _id, msg = data
         msg = email.message_from_string(msg)
         msg = MessageDetailWrapper(msg)
         return msg
@@ -146,7 +146,7 @@ class MessageHandler(object):
         self.server.login(options.username, options.password)
         self.server.select(folder, readonly=readonly)
         # for date-limited query, use 'SINCE "8-Aug-2006"'
-        typ, data = self.server.search(None, query)
+        _typ, data = self.server.search(None, query)
         self.message_ids = data[0].split()
         log.info('loading %d messages from %s', len(self.message_ids), folder)
 
